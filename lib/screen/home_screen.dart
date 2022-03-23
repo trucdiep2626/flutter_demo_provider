@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_app/screen/home_provider.dart';
 import 'package:flutter_demo_app/screen/widgets/loading_widget.dart';
@@ -37,7 +35,6 @@ class HomeScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(16.w),
                   hintText: 'Search',
-                  //hintStyle: textStyle,
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: IconButton(
                       onPressed: () {
@@ -88,8 +85,12 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: Image.network(
+                        child: bank.logo != null? Image.network(
                           bank.logo!,
+                          width: 50.w,
+                          height: 50.w,
+                        ): Container(
+                          color: Colors.grey,
                           width: 50.w,
                           height: 50.w,
                         ),
@@ -104,14 +105,14 @@ class HomeScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "${bank.shortName!} (${bank.code!})",
+                              "${bank.shortName ?? ''} (${bank.code ?? ''})",
                               style: TextStyle(fontSize: 16.sp),
                             ),
                             SizedBox(
                               height: 4.h,
                             ),
                             Text(
-                              bank.name!,
+                              bank.name ??'',
                               softWrap: true,
                               style: TextStyle(fontSize: 12.sp),
                             ),

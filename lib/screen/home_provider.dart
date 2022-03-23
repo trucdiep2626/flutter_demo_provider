@@ -54,7 +54,7 @@ class HomeProvider extends StateNotifier<HomeState> {
     state = state.update(loadedType: LoadedType.error);
   }
 
-  Future getBanksList() async {
+  Future<void> getBanksList() async {
     try {
       showLoading();
       final response = await ApiClient.getRequest();
@@ -62,7 +62,7 @@ class HomeProvider extends StateNotifier<HomeState> {
       {
         List<BankModel> banksList = [];
         banksList.addAll(response.map((e) => BankModel.fromJson(e)).toList());
-        banksList.sort((a, b) => a.shortName!.compareTo(b.shortName!));
+        banksList.sort((a, b) => (a.shortName ?? '').compareTo(b.shortName ?? ''));
         state = state.update(
             banksDisplayList: banksList,
             banksList: banksList,
@@ -78,8 +78,8 @@ class HomeProvider extends StateNotifier<HomeState> {
     {
       showLoading();
       final banksDisplayList = state.banksList.where((bank) {
-        return bank.shortName!.toLowerCase().contains(keyword) ||
-            bank.code!.toLowerCase().contains(keyword);
+        return (bank.shortName ?? '').toLowerCase().contains(keyword) ||
+            (bank.code ?? '').toLowerCase().contains(keyword);
       }).toList();
       state = state.update(
           banksDisplayList: banksDisplayList, loadedType: LoadedType.finish);
