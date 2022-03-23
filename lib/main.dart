@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_app/screen/home_provider.dart';
 import 'package:flutter_demo_app/screen/home_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -15,19 +16,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(375,812),
-    builder: () => MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home:
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => HomeProvider()),
-          ],
-          child: HomeScreen(),
-        )));
+        designSize: const Size(375, 812),
+        builder: () => MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: MultiProvider(
+              providers: [
+                StateNotifierProvider<HomeProvider, HomeState>(
+                    create: (_) => HomeProvider(),)
+              ],
+              child: HomeScreen(),
+            )));
   }
 }
-

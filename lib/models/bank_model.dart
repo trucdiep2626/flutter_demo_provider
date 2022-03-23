@@ -3,8 +3,8 @@ part 'bank_model.freezed.dart';
 part 'bank_model.g.dart';
 
 @freezed
+@JsonSerializable(explicitToJson: true)
 class BankModel with _$BankModel {
-  @JsonSerializable(explicitToJson: true)
   factory BankModel({
     int? id,
     String? name,

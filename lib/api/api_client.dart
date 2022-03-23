@@ -22,9 +22,10 @@ class ApiClient {
 
 
   static dynamic _handleError(onError) {
-    print(onError);
-    if (onError is TimeoutException) {
-      print('timeout');
+    log(onError);
+    if (onError is TimeoutException)
+    {
+      log('timeout');
     }
   }
 
