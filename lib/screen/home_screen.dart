@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_app/screen/home_provider.dart';
 import 'package:flutter_demo_app/screen/widgets/loading_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+//import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends HookConsumerWidget {
   HomeScreen({Key? key}) : super(key: key);
 
   final bankSearchController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -27,9 +28,10 @@ class HomeScreen extends StatelessWidget {
                 controller: bankSearchController
                   ..addListener(
                     () {
-                      context
-                          .read<HomeProvider>()
-                          .searchBank(bankSearchController.text);
+                      ref.read(homeProvider.notifier).searchBank(bankSearchController.text);
+                      // context
+                      //     .read<HomeProvider>()
+                      //     .searchBank(bankSearchController.text);
                     },
                   ),
                 decoration: InputDecoration(
@@ -64,83 +66,90 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    final loadedType = context.watch<HomeState>().loadedType;
-    if (loadedType == LoadedType.finish)
-    {
-      final bankList = context.watch<HomeState>().banksDisplayList;
-      if (bankList.isEmpty)
-      {
-        return const Center(
-          child: Text('No result found'),
-        );
-      } else
-        {
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              final bank = bankList[index];
-              return Container(
-                  alignment: Alignment.center,
-                  height: 60.h,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: bank.logo != null? Image.network(
-                          bank.logo!,
-                          width: 50.w,
-                          height: 50.w,
-                        ): Container(
-                          color: Colors.grey,
-                          width: 50.w,
-                          height: 50.w,
-                        ),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width -
-                            50.w -
-                            2 * 10.w -
-                            2 * 16.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "${bank.shortName ?? ''} (${bank.code ?? ''})",
-                              style: TextStyle(fontSize: 16.sp),
-                            ),
-                            SizedBox(
-                              height: 4.h,
-                            ),
-                            Text(
-                              bank.name ??'',
-                              softWrap: true,
-                              style: TextStyle(fontSize: 12.sp),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ));
-            },
-            itemCount: bankList.length,
-          );
-        }
-    }
-    if (loadedType == LoadedType.error)
-    {
-      return const Center(
-        child: Text('BankListScreenConstants.errorMessage'),
-      );
-    }
-    return ListView.builder(
-      physics:
-          const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      itemBuilder: (context, index) {
-        return _buildLoadingListTileWidget();
-      },
-      itemCount: 10,
-    );
-  }
+    //final loadedType = context.watch<HomeState>().loadedType;
+   return Consumer(
+        builder: (_, ref, child) {
+          final state = ref.watch(homeProvider);
+          final loadedType = state.loadedType;
+             if (loadedType == LoadedType.finish)
+            {
+              final bankList = state.banksDisplayList;
+              if (bankList.isEmpty)
+              {
+                return const Center(
+                  child: Text('No result found'),
+                );
+              } else
+                {
+                  return ListView.builder(
+                    itemBuilder: (context, index) {
+                      final bank = bankList[index];
+                      return Container(
+                          alignment: Alignment.center,
+                          height: 60.h,
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                child: bank.logo != null? Image.network(
+                                  bank.logo!,
+                                  width: 50.w,
+                                  height: 50.w,
+                                ): Container(
+                                  color: Colors.grey,
+                                  width: 50.w,
+                                  height: 50.w,
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width -
+                                    50.w -
+                                    2 * 10.w -
+                                    2 * 16.w,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "${bank.shortName ?? ''} (${bank.code ?? ''})",
+                                      style: TextStyle(fontSize: 16.sp),
+                                    ),
+                                    SizedBox(
+                                      height: 4.h,
+                                    ),
+                                    Text(
+                                      bank.name ??'',
+                                      softWrap: true,
+                                      style: TextStyle(fontSize: 12.sp),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ));
+                    },
+                    itemCount: bankList.length,
+                  );
+                }
+            }
+            if (loadedType == LoadedType.error)
+            {
+              return const Center(
+                child: Text('Error'),
+              );
+            }
+            return ListView.builder(
+              physics:
+                  const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              itemBuilder: (context, index) {
+                return _buildLoadingListTileWidget();
+              },
+              itemCount: 10,
+            );
+          }
+        );}
+
+
 
   Widget _buildLoadingListTileWidget() {
     return ListTile(

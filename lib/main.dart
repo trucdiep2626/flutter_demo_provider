@@ -4,9 +4,10 @@ import 'package:flutter_demo_app/screen/home_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart'
+;
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child:  MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,12 +23,15 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: MultiProvider(
-              providers: [
-                StateNotifierProvider<HomeProvider, HomeState>(
-                    create: (_) => HomeProvider(),)
-              ],
-              child: HomeScreen(),
-            )));
+            home: HomeScreen(),
+            // MultiProvider(
+            //   providers: [
+            //     StateNotifierProvider<HomeProvider, HomeState>(
+            //         create: (_) => HomeProvider(),)
+            //   ],
+            //   child: HomeScreen(),
+            // )
+        )
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_demo_app/api/api_client.dart';
 import 'package:flutter_demo_app/models/bank_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 enum LoadedType { start, error, finish }
@@ -28,8 +29,12 @@ class HomeState extends Equatable {
   List<Object?> get props => [banksList, banksDisplayList, loadedType];
 }
 
-class HomeProvider extends StateNotifier<HomeState> {
-  HomeProvider()
+final homeProvider = StateNotifierProvider<HomeStateNotifier, HomeState>((ref) {
+  return HomeStateNotifier();
+});
+
+class HomeStateNotifier extends StateNotifier<HomeState> with LocatorMixin {
+  HomeStateNotifier()
       : super(const HomeState(
             banksList: [],
             banksDisplayList: [],
