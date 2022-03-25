@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_app/screen/home_provider.dart';
 import 'package:flutter_demo_app/screen/home_screen.dart';
 import 'package:flutter_demo_app/screen/life_cycle_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
 ;
 void main() {

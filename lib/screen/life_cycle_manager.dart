@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 
 class LifeCycleManager extends StatefulWidget {
@@ -19,16 +20,16 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     super.didChangeAppLifecycleState(state);
     switch (state) {
       case AppLifecycleState.inactive:
-        print('appLifeCycleState inactive');
+        log('appLifeCycleState inactive');
         break;
       case AppLifecycleState.resumed:
-        print('appLifeCycleState resumed');
+        log('appLifeCycleState resumed');
         break;
       case AppLifecycleState.paused:
-        print('appLifeCycleState paused');
+        log('appLifeCycleState paused');
         break;
       case AppLifecycleState.detached:
-        print('appLifeCycleState detached');
+        log('appLifeCycleState detached');
         break;
     }
   }
